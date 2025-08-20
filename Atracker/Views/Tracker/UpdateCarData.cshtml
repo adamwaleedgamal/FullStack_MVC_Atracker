@@ -1,0 +1,36 @@
+﻿@model Atracker.Models.Vehicle
+
+@{
+    ViewData["Title"] = "Update Car Data";
+    Layout = "~/Views/Shared/_TrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <div class="row">
+        <div class="col-md-7">
+            <h2 class="text-center mb-2">welcome to Delivery Rep dashboard</h2>
+            <h4 class="text-center text-muted mb-4">Update car's Data</h4>
+
+            @if (Model != null)
+            {
+                <div class="card p-3 mb-3">
+                    <p><strong>Vehicle ID:</strong> @Model.VehicleIdentifier</p>
+                    <p><strong>Car Type:</strong> @Model.CarType</p>
+                    <p><strong>License Plate Number:</strong> @Model.LicensePlate</p>
+                </div>
+                <div class="card p-3 mb-3">
+                    <p><strong>Last Inspection:</strong> @Model.LastInspection.ToShortDateString()</p>
+                    <p><strong>Last Oil Change:</strong> @Model.LastOilChange.ToShortDateString()</p>
+                    <p><strong>Next Oil Change:</strong> @Model.NextOilChange.ToShortDateString()</p>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">You are not currently assigned to a vehicle.</div>
+            }
+        </div>
+        <div class="col-md-5">
+            <img src="https://i.imgur.com/gK6kPlF.png" class="img-fluid rounded" alt="Delivery Truck" />
+        </div>
+    </div>
+</div>

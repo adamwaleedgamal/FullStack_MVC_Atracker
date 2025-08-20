@@ -241,6 +241,9 @@ namespace Atracker.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AssignedToId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("CompletedDate")
                         .HasColumnType("datetime2");
 
@@ -273,6 +276,8 @@ namespace Atracker.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignedToId");
 
                     b.ToTable("TaskItems");
                 });
@@ -525,6 +530,15 @@ namespace Atracker.Migrations
                     b.Navigation("Task");
                 });
 
+            modelBuilder.Entity("Atracker.Models.TaskItem", b =>
+                {
+                    b.HasOne("Atracker.Models.ApplicationUser", "AssignedTo")
+                        .WithMany("AssignedTasks")
+                        .HasForeignKey("AssignedToId");
+
+                    b.Navigation("AssignedTo");
+                });
+
             modelBuilder.Entity("Atracker.Models.Vehicle", b =>
                 {
                     b.HasOne("Atracker.Models.ApplicationUser", "AssignedDriver")
@@ -583,6 +597,11 @@ namespace Atracker.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Atracker.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("AssignedTasks");
                 });
 
             modelBuilder.Entity("Atracker.Models.Vehicle", b =>

@@ -42,5 +42,7 @@ namespace Atracker.Models // <-- Make sure this namespace matches your project
         public string? ReplyMessage { get; set; }
         public string? Feedback { get; set; }
         public DateTime? CompletedDate { get; set; }
+        public string? AssignedToId { get; set; }
+        public ApplicationUser? AssignedTo { get; set; }
     }
 }

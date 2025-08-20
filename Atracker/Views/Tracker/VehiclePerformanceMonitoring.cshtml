@@ -1,0 +1,18 @@
+﻿@model Atracker.Models.DailyReport
+
+@{
+    ViewData["Title"] = "Vehicle Monitoring";
+    Layout = "~/Views/Shared/_TrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h2 class="mb-4">Vehicle & Performance Monitoring</h2>
+
+    <form asp-action="VehiclePerformanceMonitoring">
+        <h5>Daily Trip Summary (Report):</h5>
+        <div class="form-group mb-3">
+            <textarea asp-for="ReportContent" class="form-control" rows="8"></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark btn-lg">Submit</button>
+    </form>
+</div>

@@ -12,7 +12,7 @@ namespace Atracker.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                return RedirectToAction("TaskDeliveryManagement", "Head"); // Admin sees Head dashboard
+                return RedirectToAction("TaskDeliveryManagement", "Admin"); // Admin sees Head dashboard
             }
             if (User.IsInRole("Manager"))
             {
@@ -25,7 +25,7 @@ namespace Atracker.Controllers
             }
             if (User.IsInRole("Tracker"))
             {
-                return RedirectToAction("Dashboard", "Tracker");
+                return RedirectToAction("TaskOverview", "Tracker");
             }
 
             return View(); // Fallback

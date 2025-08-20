@@ -1,0 +1,29 @@
+﻿@model Atracker.ViewModels.TaskOverviewViewModel
+
+@{
+    ViewData["Title"] = "Task Overview";
+    Layout = "~/Views/Shared/_TrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h2 class="text-center mb-2">welcome to Delivery Rep dashboard</h2>
+    <h4 class="text-center text-muted mb-4">Task Overview & Status Updates & Communication</h4>
+
+    @if (Model.CurrentTask != null)
+    {
+        <div class="p-3">
+            <p><strong>Task ID:</strong> @Model.CurrentTask.Id</p>
+            <p><strong>User ID:</strong> @Model.CurrentUser.Id</p>
+            <p><strong>Car ID:</strong> @Model.AssignedCar?.Id</p>
+            <p><strong>Take product from ...... to .......</strong></p>
+            <p><strong>Location:</strong> <a href="@Model.CurrentTask.Location" target="_blank">@Model.CurrentTask.Location</a></p>
+            <p><strong>Delivery Priority:</strong> <span class="badge bg-danger text-uppercase">@Model.CurrentTask.DeliveryPriority</span></p>
+            <p><strong>Task status:</strong> (@Model.CurrentTask.TaskStatus)</p>
+            <p><strong>DeadLine:</strong> @Model.CurrentTask.Deadline.ToString("d/M")</p>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">You do not have any active tasks assigned to you.</div>
+    }
+</div>

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Atracker.Migrations
 {
     /// <inheritdoc />
-    public partial class iti : Migration
+    public partial class ininini : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,27 +64,6 @@ namespace Atracker.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SampleDatas", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TaskItems",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DeliveryPriority = table.Column<int>(type: "int", nullable: false),
-                    TaskStatus = table.Column<int>(type: "int", nullable: false),
-                    ReplyMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Feedback = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CompletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TaskItems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,6 +184,33 @@ namespace Atracker.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TaskItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeliveryPriority = table.Column<int>(type: "int", nullable: false),
+                    TaskStatus = table.Column<int>(type: "int", nullable: false),
+                    ReplyMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Feedback = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AssignedToId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TaskItems_AspNetUsers_AssignedToId",
+                        column: x => x.AssignedToId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -390,6 +396,11 @@ namespace Atracker.Migrations
                 name: "IX_TaskFeedbacks_TaskId",
                 table: "TaskFeedbacks",
                 column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskItems_AssignedToId",
+                table: "TaskItems",
+                column: "AssignedToId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_AssignedDriverId",

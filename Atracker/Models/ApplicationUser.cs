@@ -8,5 +8,6 @@ namespace Atracker.Models
         public string FullName { get; set; }
 
         public string? ManagerFeedback { get; set; }
+        public ICollection<TaskItem> AssignedTasks { get; set; }
     }
 }

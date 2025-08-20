@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Atracker</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="top-header">
+        Atracker
+    </header>
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3 class="sidebar-header">Main Menu</h3>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a asp-controller="Tracker" asp-action="TaskOverview" class="nav-link">Task Overview</a>
+                </li>
+                <li>
+                    <a asp-controller="Tracker" asp-action="VehiclePerformanceMonitoring" class="nav-link">Vehicle & Performance Monitoring</a>
+                </li>
+                <li>
+                    <a asp-controller="Tracker" asp-action="UpdateCarData" class="nav-link">Update Car Data</a>
+                </li>
+            </ul>
+            <hr />
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">Manage Profile</a>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
