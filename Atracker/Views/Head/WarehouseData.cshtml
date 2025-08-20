@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Atracker.Models.WarehouseSample>
+
+@{
+    ViewData["Title"] = "Warehouse Data";
+    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h4 class="mb-3">Samples name</h4>
+    <!-- Placeholder UI based on mockup -->
+    <div class="d-flex justify-content-between my-2 p-2 bg-light border rounded">
+        <span>Sample A</span>
+        <span>Sample B</span>
+        <span>Sample C</span>
+    </div>
+
+    <h4 class="mt-4 mb-3">Samples ID</h4>
+    <div class="list-group">
+        @foreach (var item in Model)
+        {
+            <div class="list-group-item">@item.SampleIdentifier - @item.SampleName</div>
+        }
+    </div>
+</div>

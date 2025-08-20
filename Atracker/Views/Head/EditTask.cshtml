@@ -1,0 +1,55 @@
+﻿@model Atracker.Models.TaskItem
+
+@{
+    ViewData["Title"] = "Edit Task";
+    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h2>Edit Task</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="EditTask">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group mb-3">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Deadline" class="control-label"></label>
+                    <input asp-for="Deadline" type="date" class="form-control" />
+                    <span asp-validation-for="Deadline" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Location" class="control-label"></label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="DeliveryPriority" class="control-label"></label>
+                    <select asp-for="DeliveryPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-control"></select>
+                    <span asp-validation-for="DeliveryPriority" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="TaskStatus" class="control-label"></label>
+                    <select asp-for="TaskStatus" asp-items="Html.GetEnumSelectList<Status>()" class="form-control"></select>
+                    <span asp-validation-for="TaskStatus" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save Changes" class="btn btn-primary" />
+                    <a asp-action="TaskDeliveryManagement" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

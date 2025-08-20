@@ -1,0 +1,18 @@
+﻿@model Atracker.Models.TaskItem
+@{
+    ViewData["Title"] = "Provide Feedback"; Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h2>Provide Feedback for Task: @Model.Title</h2>
+    <hr />
+    <form asp-action="Feedback" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group mb-3">
+            <label for="feedbackMessage">Feedback Message</label>
+            <textarea name="feedbackMessage" class="form-control" rows="4">@Model.Feedback</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        <a asp-action="TaskDeliveryManagement" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

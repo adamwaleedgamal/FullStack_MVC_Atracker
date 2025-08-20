@@ -1,0 +1,15 @@
+﻿@model Atracker.Models.ApplicationUser
+@{
+    Layout = "~/Views/Shared/_MangerLayout.cshtml";
+}
+<div class="custom-card">
+    <h3>Add New Tracker User</h3>
+    <p>A default password "Password@123" will be assigned.</p>
+    <hr />
+    <form asp-action="AddTracker">
+        <div class="form-group mb-2"><label asp-for="FullName"></label><input asp-for="FullName" class="form-control" /></div>
+        <div class="form-group mb-2"><label asp-for="Email"></label><input asp-for="Email" class="form-control" /></div>
+        <div class="form-group mb-3"><label asp-for="PhoneNumber"></label><input asp-for="PhoneNumber" class="form-control" /></div>
+        <button type="submit" class="btn btn-primary">Create User</button>
+    </form>
+</div>

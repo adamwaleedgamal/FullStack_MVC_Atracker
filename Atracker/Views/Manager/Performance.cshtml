@@ -1,0 +1,85 @@
+﻿@* THIS IS THE MOST IMPORTANT LINE IN THE ENTIRE FILE.
+   It MUST point to "PerformanceDashboardViewModel". *@
+@model Atracker.ViewModels.PerformanceDashboardViewModel
+
+@{
+    ViewData["Title"] = "Performance Report";
+    Layout = "~/Views/Shared/_MangerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <!-- Top Filter Bar -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4>Reports</h4>
+        <div>
+            <select class="form-select-sm d-inline-block w-auto"> <option selected>Timeframe: All-time</option> </select>
+            <select class="form-select-sm d-inline-block w-auto"> <option selected>People: All</option> </select>
+            <select class="form-select-sm d-inline-block w-auto"> <option selected>Topic: All</option> </select>
+            <button class="btn btn-sm btn-outline-secondary">⬇ Download</button>
+        </div>
+    </div>
+
+    <!-- Top Stats Cards -->
+    <div class="row text-center mb-4 g-3">
+        <div class="col"><div class="card p-2"><h6>Active Users</h6><h3>@Model.ActiveUsers / @Model.TotalUsersGoal</h3></div></div>
+        <div class="col"><div class="card p-2"><h6>Tasks Completed</h6><h3>@Model.TasksCompletedTotal</h3></div></div>
+        <div class="col"><div class="card p-2"><h6>Earnings & Incentives</h6><h3>@Model.EarningsAndIncentives</h3></div></div>
+    </div>
+
+    <!-- Knowledge Cards -->
+    <div class="row text-center mb-4 g-3">
+        <div class="col"><div class="card p-2"><h6>Starting Knowledge</h6><h3>@Model.StartingKnowledgePercent%</h3></div></div>
+        <div class="col"><div class="card p-2"><h6>Current Knowledge</h6><h3>@Model.CurrentKnowledgePercent%</h3></div></div>
+        <div class="col"><div class="card p-2"><h6>Knowledge Gain</h6><h3 class="text-success">@Model.KnowledgeGain</h3></div></div>
+    </div>
+
+    <!-- Main Content Row -->
+    <div class="row g-3">
+        <!-- Left Column: Bar Chart & Top 3 -->
+        <div class="col-lg-8">
+            <div class="card p-3 mb-3">
+                <div class="d-flex justify-content-between">
+                    <h5>This Week (Task)</h5>
+                    <select class="form-select-sm d-inline-block w-auto"><option>Month</option></select>
+                </div>
+                <!-- This is a static HTML/CSS representation of a bar chart -->
+                <div class="d-flex align-items-end" style="height: 150px; border-bottom: 1px solid #ccc;">
+                    <div class="bg-primary mx-1" style="width: 8%; height: 20%;"></div>
+                    <div class="bg-primary mx-1" style="width: 8%; height: 30%;"></div>
+                    <div class="bg-primary mx-1" style="width: 8%; height: 25%;"></div>
+                    <div class="bg-primary mx-1" style="width: 8%; height: 40%;"></div>
+                    <div class="bg-primary mx-1" style="width: 8%; height: 55%;"></div>
+                    <div class="bg-primary mx-1" style="width: 8%; height: 45%;"></div>
+                    <div class="bg-primary mx-1" style="width: 8%; height: 65%;"></div>
+                    <div class="bg-primary mx-1" style="width: 8%; height: 80%;"></div>
+                    <div class="bg-primary mx-1" style="width: 8%; height: 70%;"></div>
+                    <div class="bg-primary mx-1" style="width: 8%; height: 90%;"></div>
+                </div>
+            </div>
+            <div class="card p-3">
+                <h5>Top 3</h5>
+                @foreach (var performer in Model.TopPerformers)
+                {
+                    <div class="mb-2">
+                        <small>@performer.Name</small>
+                        <div class="progress" style="height: 15px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: @performer.Score%;" aria-valuenow="@performer.Score" aria-valuemin="0" aria-valuemax="100"><small>@performer.Score% Correct</small></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Right Column: Donut Charts -->
+        <div class="col-lg-4">
+            <div class="card p-3 text-center">
+                <h5>Time Taken Completed Tasks</h5>
+                <p>...HRs: @Model.CompletedTasksFastPercent%</p>
+                <p>...HRs: @Model.CompletedTasksMediumPercent%</p>
+                <p>...HRs: @Model.CompletedTasksSlowPercent%</p>
+                <hr />
+                <a asp-action="AllReports" class="btn btn-dark">All Reports (PDF)</a>
+            </div>
+        </div>
+    </div>
+</div>

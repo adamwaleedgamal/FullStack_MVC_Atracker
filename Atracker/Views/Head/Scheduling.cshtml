@@ -1,0 +1,25 @@
+﻿@model Atracker.Models.TaskItem
+
+@{
+    ViewData["Title"] = "Scheduling";
+    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h3>Scheduling And Distributing Tasks & Communication</h3>
+    <hr />
+    <h4>Task 1</h4>
+    <p><strong>Deadline:</strong> 2 | 5</p>
+    <p><strong>Take product from ...... to .......</strong></p>
+    <p><strong>Location:</strong> Main Warehouse</p>
+    <p><strong>Delivery Priority:</strong> <span class="badge bg-danger">Urgent</span></p>
+    <p><strong>Task status:</strong> (On The Way - completed - postponed)</p>
+
+    <form>
+        <div class="form-group">
+            <label>Reply</label>
+            <textarea class="form-control" rows="4" placeholder="Add as many details as possible..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark mt-2">Send</button>
+    </form>
+</div>

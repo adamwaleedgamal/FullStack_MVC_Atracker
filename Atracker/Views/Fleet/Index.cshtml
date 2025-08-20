@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Atracker.Models.Vehicle>
+
+@{
+    ViewData["Title"] = "Fleet Monitoring";
+}
+
+<h1>Fleet Monitoring</h1>
+<p>A list of all vehicles in the fleet.</p>
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-primary">
+            <th>Vehicle ID</th>
+            <th>Car Type</th>
+            <th>License Plate</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in Model)
+        {
+            <tr>
+                <td>@vehicle.Id</td>
+                <td>@vehicle.CarType</td>
+                <td>@vehicle.LicensePlate</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@vehicle.Id" class="btn btn-info btn-sm">Monitor Vehicle</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

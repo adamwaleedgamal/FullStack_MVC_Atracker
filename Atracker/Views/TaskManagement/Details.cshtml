@@ -1,0 +1,38 @@
+﻿@model Atracker.Models.TaskDetailViewModel
+@{
+    ViewData["Title"] = "Task Details";
+    Layout = "_DashboardLayout";
+}
+
+<div class="container-fluid">
+    <h3>Scheduling And Distributing Tasks & Communication</h3>
+    <hr />
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Task: @Model.Task.Title</h4>
+            <p><strong>Status:</strong> <span class="fw-bold">@Model.Task.Status</span></p>
+            <p><strong>Assigned By:</strong> @Model.AssignedByName</p>
+            <p><strong>Deadline:</strong> @Model.Task.Deadline.ToString("g")</p>
+
+            <hr />
+            <h5>Reply / Update Status</h5>
+            <form asp-action="UpdateTaskStatus" method="post">
+                <input type="hidden" asp-for="UpdateForm.TaskId" />
+                <div class="col-md-6 mb-3">
+                    <label asp-for="UpdateForm.NewStatus" class="form-label"></label>
+                    <select asp-for="UpdateForm.NewStatus"
+                            asp-items="Html.GetEnumSelectList<Atracker.Models.AssignmentStatus>()"
+                            class="form-select"></select>
+                    <span asp-validation-for="UpdateForm.NewStatus" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="UpdateForm.ReplyText" class="form-label"></label>
+                    <textarea asp-for="UpdateForm.ReplyText" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="UpdateForm.ReplyText" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Update</button>
+                <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary ms-2">Back</a>
+            </form>
+        </div>
+    </div>
+</div>

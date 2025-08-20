@@ -1,0 +1,70 @@
+﻿@model Atracker.Models.Vehicle
+@using Atracker.Models
+@{
+    ViewData["Title"] = "Vehicle Monitoring";
+    var driver = ViewBag.CurrentDriver as ApplicationUser;
+    var task = ViewBag.CurrentTask as TaskAssignment;
+}
+
+<h2>Fleet & Vehicle Monitoring</h2>
+<hr />
+
+<div class="row">
+    <!-- Main Content Area -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Vehicle Status & Performance</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>Vehicle ID:</strong> @Model.Id</p>
+                <p><strong>Car Type:</strong> @Model.CarType</p>
+                <p><strong>License Plate Number:</strong> @Model.LicensePlate</p>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4>Driver's Name & Contact Information</h4>
+            </div>
+            <div class="card-body">
+                @if (driver != null)
+                {
+                    <p><strong>Name:</strong> @driver.FullName</p>
+                    <p><strong>Phone No.:</strong> @(driver.PhoneNumber ?? "N/A")</p>
+                    <p><strong>Email:</strong> @driver.Email</p>
+                }
+                else
+                {
+                    <p class="text-muted">No driver currently assigned to an active task with this vehicle.</p>
+                }
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4>Maintenance & Alerts</h4>
+            </div>
+            <div class="card-body">
+                @{
+                    var lastInspection = Model.MaintenanceLogs?.Where(m => m.LogType == LogType.Inspection).OrderByDescending(m => m.DatePerformed).FirstOrDefault();
+                    var lastOilChange = Model.MaintenanceLogs?.Where(m => m.LogType == LogType.OilChange).OrderByDescending(m => m.DatePerformed).FirstOrDefault();
+                }
+                <p><strong>Last Inspection:</strong> @(lastInspection?.DatePerformed.ToShortDateString() ?? "N/A")</p>
+                <p><strong>Last Oil Change:</strong> @(lastOilChange?.DatePerformed.ToShortDateString() ?? "N/A")</p>
+                <p><strong>Next Oil Change:</strong> @(lastOilChange?.NextDueDate?.ToShortDateString() ?? "N/A")</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Image Area -->
+    <div class="col-md-4">
+        <img src="~/images/fleet-truck.png" class="img-fluid rounded" alt="Fleet Vehicle Image" />
+        <!-- NOTE: You will need to add an image named 'fleet-truck.png' to your 'wwwroot/images' folder -->
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Back to Fleet List</a>
+</div>

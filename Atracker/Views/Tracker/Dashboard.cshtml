@@ -1,0 +1,53 @@
+﻿@model Atracker.ViewModels.TrackerDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h4 class="mb-3">In This Day</h4>
+    <div class="list-group">
+        @if (Model.TodaysTasks.Any())
+        {
+            @foreach (var task in Model.TodaysTasks)
+            {
+                <div class="list-group-item">@task.Title - @task.Location</div>
+            }
+        }
+        else
+        {
+            <p>No tasks for today.</p>
+        }
+    </div>
+
+    <h4 class="mb-3 mt-4">Last Week</h4>
+    <div class="list-group">
+        @if (Model.LastWeeksTasks.Any())
+        {
+            @foreach (var task in Model.LastWeeksTasks)
+            {
+                <div class="list-group-item">@task.Title - @task.Deadline.ToShortDateString()</div>
+            }
+        }
+        else
+        {
+            <p>No tasks from the last week.</p>
+        }
+    </div>
+
+    <h4 class="mb-3 mt-4">Last Month</h4>
+    <div class="list-group">
+        @if (Model.LastMonthsTasks.Any())
+        {
+            @foreach (var task in Model.LastMonthsTasks)
+            {
+                <div class="list-group-item">@task.Title - @task.Deadline.ToShortDateString()</div>
+            }
+        }
+        else
+        {
+            <p>No tasks from the last month.</p>
+        }
+    </div>
+</div>

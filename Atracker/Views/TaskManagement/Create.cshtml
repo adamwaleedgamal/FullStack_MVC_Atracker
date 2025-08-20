@@ -1,0 +1,67 @@
+﻿@model Atracker.Models.CreateTaskViewModel
+@{
+    ViewData["Title"] = "Create New Task";
+}
+
+<h1>Create and Assign New Task</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Deadline" class="control-label"></label>
+                <input asp-for="Deadline" class="form-control" type="datetime-local" />
+                <span asp-validation-for="Deadline" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="FromLocation" class="control-label"></label>
+                <input asp-for="FromLocation" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ToLocation" class="control-label"></label>
+                <input asp-for="ToLocation" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Priority" class="control-label"></label>
+                <select asp-for="Priority" asp-items="Html.GetEnumSelectList<Atracker.Models.TaskPriority>()" class="form-control"></select>
+                <span asp-validation-for="Priority" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="AssignedToId" class="control-label"></label>
+                <select asp-for="AssignedToId" asp-items="@Model.TrackerList" class="form-control">
+                    <option value="">-- Select a Tracker --</option>
+                </select>
+                <span asp-validation-for="AssignedToId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create Task" class="btn btn-primary" />
+                <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

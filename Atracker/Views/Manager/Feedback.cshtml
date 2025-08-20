@@ -1,0 +1,16 @@
+﻿@model Atracker.Models.ApplicationUser
+@{
+    Layout = "~/Views/Shared/_MangerLayout.cshtml";
+}
+<div class="custom-card">
+    <h3>Provide Feedback for @Model.FullName</h3>
+    <hr />
+    <form asp-action="Feedback">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group mb-3">
+            <label asp-for="ManagerFeedback"></label>
+            <textarea asp-for="ManagerFeedback" class="form-control" rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+    </form>
+</div>

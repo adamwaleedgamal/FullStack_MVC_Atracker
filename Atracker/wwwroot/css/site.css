@@ -1,0 +1,136 @@
+/* General Body and Layout Styles */
+:root {
+    --sidebar-bg: #f8f9fa;
+    --main-bg: #e9ecef;
+    --card-bg: #ffffff;
+    --primary-purple: #6f42c1;
+    --dark-text: #212529;
+    --border-color: #dee2e6;
+}
+
+body {
+    background-color: var(--main-bg);
+    color: var(--dark-text);
+}
+
+.main-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    background-color: var(--main-bg);
+}
+
+.top-header {
+    background-color: #343a40;
+    color: white;
+    padding: 1rem 1.5rem;
+    font-size: 1.25rem;
+}
+
+
+/* Sidebar Styles */
+.sidebar {
+    width: 280px;
+    min-width: 280px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
+
+.sidebar-header {
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar .nav-link {
+    color: var(--dark-text);
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+    .sidebar .nav-link:hover, .sidebar .nav-link.active {
+        background-color: var(--dark-text);
+        color: white;
+    }
+
+/* Login Page Styles */
+.login-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--main-bg);
+}
+
+.login-card {
+    background-color: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+    .login-card h2 {
+        margin-bottom: 2rem;
+        font-weight: 300;
+    }
+
+    .login-card .btn-primary {
+        background-color: var(--primary-purple);
+        border-color: var(--primary-purple);
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .login-card .form-control {
+        background-color: #f1f1f1;
+        border: none;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .login-card .register-link {
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+
+/* General Component Styles */
+.custom-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.btn-purple {
+    background-color: var(--primary-purple);
+    border-color: var(--primary-purple);
+    color: white;
+}
+
+.btn-update {
+    background-color: #e9ecef;
+    color: var(--dark-text);
+    border: 1px solid #ced4da;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    background-color: white;
+    margin-bottom: -1px; /* Creates a shared border effect */
+}

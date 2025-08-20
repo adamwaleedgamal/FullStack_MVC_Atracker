@@ -1,0 +1,56 @@
+﻿@model Atracker.Models.TrackerDashboardViewModel
+@{
+    ViewData["Title"] = "My Tasks"; Layout = "_DashboardLayout";
+}
+
+@functions {
+    public static Microsoft.AspNetCore.Html.IHtmlContent RenderTask(TaskAssignment task) { return new Microsoft.AspNetCore.Html.HtmlString($@"<div class='col-md-4 mb-3'><div class='card h-100 shadow-sm'><div class='card-body'><h5 class='card-title'>{task.Title}</h5><h6 class='card-subtitle mb-2 text-muted'>Status: {task.Status}</h6><a href='/TaskManagement/Details/{task.Id}' class='card-link'>View Details</a></div><div class='card-footer text-muted'>Deadline: {task.Deadline:g}</div></div></div>"); }
+}
+
+<h3 class="atracker-header">In This Day</h3>
+<div class="row">
+    @if (Model.TasksToday.Any())
+    {
+        foreach (var task in Model.TasksToday)
+        {
+            @RenderTask(task)
+            ;
+        }
+    }
+    else
+    {
+        <p class="text-muted col">No tasks for today.</p>
+    }
+</div>
+<hr class="my-4" />
+<h3 class="atracker-header">Last Week</h3>
+<div class="row">
+    @if (Model.TasksLastWeek.Any())
+    {
+        foreach (var task in Model.TasksLastWeek)
+        {
+            @RenderTask(task)
+            ;
+        }
+    }
+    else
+    {
+        <p class="text-muted col">No tasks from last week.</p>
+    }
+</div>
+<hr class="my-4" />
+<h3 class="atracker-header">Last Month</h3>
+<div class="row">
+    @if (Model.TasksLastMonth.Any())
+    {
+        foreach (var task in Model.TasksLastMonth)
+        {
+            @RenderTask(task)
+            ;
+        }
+    }
+    else
+    {
+        <p class="text-muted col">No tasks from last month.</p>
+    }
+</div>

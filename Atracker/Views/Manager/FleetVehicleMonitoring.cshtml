@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Atracker.Models.Vehicle>
+
+@{
+    ViewData["Title"] = "Fleet Monitoring";
+    Layout = "~/Views/Shared/_MangerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Fleet & Vehicle Monitoring</h3>
+        <a asp-action="AddVehicle" class="btn btn-success">Add New Vehicle</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Vehicle ID</th>
+                <th>Car Type</th>
+                <th>License Plate</th>
+                <th>Assigned Driver</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vehicle in Model)
+            {
+                <tr>
+                    <td>@vehicle.VehicleIdentifier</td>
+                    <td>@vehicle.CarType</td>
+                    <td>@vehicle.LicensePlate</td>
+                    <td>@(vehicle.AssignedDriver?.FullName ?? "N/A")</td>
+                    <td>
+                        <a asp-action="VehicleDetails" asp-route-id="@vehicle.Id" class="btn btn-sm btn-secondary">Details</a>
+                        <a asp-action="EditVehicle" asp-route-id="@vehicle.Id" class="btn btn-sm btn-info">Edit</a>
+                        <a asp-action="DeleteVehicle" asp-route-id="@vehicle.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

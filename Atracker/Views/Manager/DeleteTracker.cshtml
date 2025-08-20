@@ -1,0 +1,13 @@
+﻿@model Atracker.Models.ApplicationUser
+@{
+    Layout = "~/Views/Shared/_MangerLayout.cshtml";
+}
+<div class="custom-card">
+    <h3 class="text-danger">Are you sure you want to delete this user?</h3>
+    <p><strong>User:</strong> @Model.FullName (@Model.Email)</p>
+    <form asp-action="DeleteTrackerConfirmed">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a asp-action="UserTaskManagement" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

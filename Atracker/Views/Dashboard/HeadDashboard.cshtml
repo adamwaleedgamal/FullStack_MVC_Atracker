@@ -1,0 +1,27 @@
+﻿@model HeadDashboardViewModel
+@{
+    ViewData["Title"] = "Task & Delivery Management"; Layout = "_DashboardLayout";
+}
+
+<div class="dashboard-card">
+    <div class="dashboard-card-header">
+        <h4>Welcome to Head Dashboard</h4>
+    </div>
+    @foreach (var tracker in Model.Trackers)
+    {
+        <div class="tracker-list-item">
+            <input class="form-check-input" type="checkbox" value="">
+            <div class="tracker-list-item-info">
+                <h5>@tracker.FullName</h5>
+                <p>Email: @tracker.Email | Contact: @tracker.PhoneNumber</p>
+            </div>
+            <div class="ms-auto">
+                <a asp-controller="Manager" asp-action="Edit" asp-route-id="@tracker.UserId" class="btn btn-sm btn-custom-update">update</a>
+                <a href="#" class="btn btn-sm btn-custom-feedback ms-2 disabled">feedback</a>
+                <form asp-controller="Manager" asp-action="Delete" asp-route-id="@tracker.UserId" method="post" class="d-inline" onsubmit="return confirm('Are you sure?');">
+                    <button type="submit" class="btn btn-sm btn-custom-delete ms-2"><i class="fas fa-trash"></i></button>
+                </form>
+            </div>
+        </div>
+    }
+</div>

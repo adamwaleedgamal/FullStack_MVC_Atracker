@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Atracker.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "View All Users";
+    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h2 class="mb-4">System Users</h2>
+    <p>This page lists all registered users in the system.</p>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

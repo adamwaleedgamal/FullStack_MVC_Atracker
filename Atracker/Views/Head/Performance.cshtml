@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Performance";
+    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4>Reports</h4>
+        <div>
+            <select class="form-select-sm"> <option selected>Timeframe: All-time</option> </select>
+            <select class="form-select-sm"> <option selected>People: All</option> </select>
+            <select class="form-select-sm"> <option selected>Topic: All</option> </select>
+            <button class="btn btn-sm btn-outline-secondary">Download</button>
+        </div>
+    </div>
+
+    <!-- Top Stats Cards -->
+    <div class="row text-center mb-4">
+        <div class="col"><div class="card p-2"><h6>Active Users</h6><h3>27/50</h3></div></div>
+        <div class="col"><div class="card p-2"><h6>Tasks Completed</h6><h3>3,298</h3></div></div>
+        <div class="col"><div class="card p-2"><h6>Earnings & Incentives</h6><h3>2m 34s</h3></div></div>
+    </div>
+    <!-- ... more UI elements from your mockup can be added here ... -->
+    <p><i>(Performance charts and detailed reports will be rendered here)</i></p>
+</div>

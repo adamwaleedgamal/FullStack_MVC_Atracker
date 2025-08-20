@@ -1,0 +1,14 @@
+﻿@model Atracker.Models.ApplicationUser
+@{
+    ViewData["Title"] = "My Profile"; Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h2>Profile Information</h2>
+    <!-- Basic Profile UI -->
+    <p><strong>Full Name:</strong> @Model.FullName</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>Phone:</strong> @(Model.PhoneNumber ?? "Not set")</p>
+    <!-- Add other fields from your UI mockup -->
+    <a asp-action="Edit" asp-controller="Profile" class="btn btn-primary">Edit</a>
+</div>

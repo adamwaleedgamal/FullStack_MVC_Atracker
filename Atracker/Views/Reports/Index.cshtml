@@ -1,0 +1,43 @@
+﻿@model PerformanceReportViewModel
+@using System.Text.Json; // Required for Json.Serialize
+
+@{
+    ViewData["Title"] = "Performance Reports";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+        <h2>Performance</h2>
+        <div>
+            <select class="form-select-sm" disabled><option>Timeframe: All-time</option></select>
+            <select class="form-select-sm" disabled><option>People: All</option></select>
+            <button class="btn btn-sm btn-outline-primary" disabled><i class="fas fa-download"></i> Download</button>
+        </div>
+    </div>
+
+    <!-- Statistic Cards -->
+    <div class="row">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Active Users</h5>
+                    <p class="card-text fs-2 fw-bold">@Model.ActiveUsers / @Model.TotalUsers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Tasks Completed</h5>
+                    <p class="card-text fs-2 fw-bold">@Model.TasksCompleted</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Average Time</h5>
+                    <p class="card-text fs-2 fw-bold">@Model.AverageCompletionTime</p>
+                </div>
+            </div>
+        </div>
