@@ -2,24 +2,37 @@
 
 @{
     ViewData["Title"] = "Scheduling";
-    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+    Layout = "~/Views/Shared/_HeadLayout.cshtml";
 }
 
 <div class="custom-card">
     <h3>Scheduling And Distributing Tasks & Communication</h3>
     <hr />
-    <h4>Task 1</h4>
-    <p><strong>Deadline:</strong> 2 | 5</p>
-    <p><strong>Take product from ...... to .......</strong></p>
-    <p><strong>Location:</strong> Main Warehouse</p>
-    <p><strong>Delivery Priority:</strong> <span class="badge bg-danger">Urgent</span></p>
-    <p><strong>Task status:</strong> (On The Way - completed - postponed)</p>
-
-    <form>
-        <div class="form-group">
-            <label>Reply</label>
-            <textarea class="form-control" rows="4" placeholder="Add as many details as possible..."></textarea>
+    <form asp-action="Scheduling">
+        <div class="form-group mb-2">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control" placeholder="e.g., Task 1" />
         </div>
-        <button type="submit" class="btn btn-dark mt-2">Send</button>
+        <div class="form-group mb-2">
+            <label asp-for="Deadline"></label>
+            <input asp-for="Deadline" type="date" class="form-control" />
+        </div>
+        <div class="form-group mb-2">
+            <label asp-for="Location"></label>
+            <input asp-for="Location" class="form-control" />
+        </div>
+        <div class="form-group mb-2">
+            <label asp-for="DeliveryPriority"></label>
+            <select asp-for="DeliveryPriority" asp-items="Html.GetEnumSelectList<Priority>()" class="form-select"></select>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="AssignedToId">Assign To User</label>
+            <select asp-for="AssignedToId" asp-items="ViewBag.AssignableUsers" class="form-select"></select>
+        </div>
+        <div class="form-group mb-2">
+            <label asp-for="Description">Task Details / Reply</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark mt-2">Send / Assign Task</button>
     </form>
 </div>

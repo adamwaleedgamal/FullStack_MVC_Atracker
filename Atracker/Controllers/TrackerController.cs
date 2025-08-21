@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -26,7 +25,6 @@ namespace Atracker.Controllers
             _userManager = userManager;
         }
 
-        // --- Main Dashboard renamed to TaskOverview ---
         public async Task<IActionResult> TaskOverview()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -44,16 +42,11 @@ namespace Atracker.Controllers
         }
 
         // --- VEHICLE & PERFORMANCE MONITORING ---
-        // GET: Shows the form
-        public IActionResult VehiclePerformanceMonitoring()
-        {
-            return View();
-        }
+        public IActionResult VehiclePerformanceMonitoring() => View(new DailyReport());
 
-        // POST: Saves the form data
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> VehiclePerformanceMonitoring(DailyReport report)
+        public async Task<IActionResult> VehiclePerformanceMonitoring([Bind("ReportContent")] DailyReport report)
         {
             if (ModelState.IsValid)
             {
@@ -61,13 +54,12 @@ namespace Atracker.Controllers
                 report.ReportDate = DateTime.UtcNow;
                 _context.Add(report);
                 await _context.SaveChangesAsync();
-                // Optional: Add a success message
+                TempData["SuccessMessage"] = "Your daily report has been submitted successfully!";
                 return RedirectToAction(nameof(TaskOverview));
             }
             return View(report);
         }
 
-        // --- UPDATE CAR DATA ---
         public async Task<IActionResult> UpdateCarData()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -1,25 +1,64 @@
-﻿@{
-    ViewData["Title"] = "Performance";
-    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+﻿@model Atracker.ViewModels.ManagerReportViewModel
+
+@{
+    ViewData["Title"] = "Performance & Reports";
+    Layout = "~/Views/Shared/_HeadLayout.cshtml";
 }
 
 <div class="custom-card">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4>Reports</h4>
-        <div>
-            <select class="form-select-sm"> <option selected>Timeframe: All-time</option> </select>
-            <select class="form-select-sm"> <option selected>People: All</option> </select>
-            <select class="form-select-sm"> <option selected>Topic: All</option> </select>
-            <button class="btn btn-sm btn-outline-secondary">Download</button>
-        </div>
+    <!-- In This Day Section -->
+    <h5 class="mb-3">In This Day</h5>
+    <div class="row g-3">
+        @if (Model.TodaysTasks.Any())
+        {
+            @foreach (var task in Model.TodaysTasks)
+            {
+                <div class="col-md-3">
+                    <div class="p-3 rounded text-center" style="background-color: #f8f9fa; border: 1px solid #dee2e6;">@task.Title</div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col"><p class="text-muted fst-italic">No tasks for today.</p></div>
+        }
     </div>
 
-    <!-- Top Stats Cards -->
-    <div class="row text-center mb-4">
-        <div class="col"><div class="card p-2"><h6>Active Users</h6><h3>27/50</h3></div></div>
-        <div class="col"><div class="card p-2"><h6>Tasks Completed</h6><h3>3,298</h3></div></div>
-        <div class="col"><div class="card p-2"><h6>Earnings & Incentives</h6><h3>2m 34s</h3></div></div>
+    <!-- Last Week Section -->
+    <h5 class="mt-4 mb-3">last week</h5>
+    <div class="row g-3">
+        @if (Model.LastWeeksTasks.Any())
+        {
+            @foreach (var task in Model.LastWeeksTasks)
+            {
+                <div class="col-md-3">
+                    <div class="p-3 rounded text-center" style="background-color: #f8f9fa; border: 1px solid #dee2e6;">@task.Title</div>
+                </div>
+            }
+        }
+        else
+        {
+            <!-- THIS IS THE CORRECTED HTML for the "no tasks" message -->
+            <div class="col"><p class="text-muted fst-italic">No tasks from last week.</p></div>
+        }
     </div>
-    <!-- ... more UI elements from your mockup can be added here ... -->
-    <p><i>(Performance charts and detailed reports will be rendered here)</i></p>
+
+    <!-- Last Month Section -->
+    <h5 class="mt-4 mb-3">last month</h5>
+    <div class="row g-3">
+        @if (Model.LastMonthsTasks.Any())
+        {
+            @foreach (var task in Model.LastMonthsTasks)
+            {
+                <div class="col-md-3">
+                    <div class="p-3 rounded text-center" style="background-color: #f8f9fa; border: 1px solid #dee2e6;">@task.Title</div>
+                </div>
+            }
+        }
+        else
+        {
+            <!-- THIS IS THE CORRECTED HTML for the "no tasks" message -->
+            <div class="col"><p class="text-muted fst-italic">No tasks from last month.</p></div>
+        }
+    </div>
 </div>

@@ -2,64 +2,48 @@
 
 @{
     ViewData["Title"] = "All Task Reports";
-    // We use a simple layout here because the UI is full-width and dark-themed
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_MangerLayout.cshtml"; // Use the Manger layout
 }
 
-<div class="container-fluid" style="background-color: #343a40; color: white; padding: 20px; min-height: 100vh;">
+<div class="custom-card">
+    <h2 class="mb-4">All Task Reports by Date</h2>
 
-    <h4 class="mb-3">manger</h4>
+    <!-- In This Day Section -->
+    <h4 class="mb-3">In This Day</h4>
+    <div class="row g-3">
+        @if (!Model.TodaysTasks.Any())
+        {
+            <p class="text-muted">No tasks for today.</p>
+        }
+        @foreach (var task in Model.TodaysTasks)
+        {
+            <div class="col-md-3"><div class="card p-2">@task.Title</div></div>
+        }
+    </div>
 
-    <div style="background-color: white; color: black; padding: 20px; border-radius: 5px;">
-        <h5 class="mb-3">In This Day</h5>
-        <div class="row g-3">
-            @if (Model.TodaysTasks.Any())
-            {
-                @foreach (var task in Model.TodaysTasks)
-                {
-                    <div class="col-md-2">
-                        <div class="p-2 rounded text-center" style="background-color: #e9ecef;">@task.Title</div>
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="col"><p class="text-muted">No tasks for today.</p></div>
-            }
-        </div>
+    <!-- Last Week Section -->
+    <h4 class="mt-4 mb-3">Last Week</h4>
+    <div class="row g-3">
+        @if (!Model.LastWeeksTasks.Any())
+        {
+            <p class="text-muted">No tasks from last week.</p>
+        }
+        @foreach (var task in Model.LastWeeksTasks)
+        {
+            <div class="col-md-3"><div class="card p-2">@task.Title</div></div>
+        }
+    </div>
 
-        <h5 class="mt-4 mb-3">last week</h5>
-        <div class="row g-3">
-            @if (Model.LastWeeksTasks.Any())
-            {
-                @foreach (var task in Model.LastWeeksTasks)
-                {
-                    <div class="col-md-2">
-                        <div class="p-2 rounded text-center" style="background-color: #e9ecef;">@task.Title</div>
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="col"><p class="text-muted">No tasks from last week.</p></div>
-            }
-        </div>
-
-        <h5 class="mt-4 mb-3">last month</h5>
-        <div class="row g-3">
-            @if (Model.LastMonthsTasks.Any())
-            {
-                @foreach (var task in Model.LastMonthsTasks)
-                {
-                    <div class="col-md-2">
-                        <div class="p-2 rounded text-center" style="background-color: #e9ecef;">@task.Title</div>
-                    </div>
-                }
-            }
-            else
-            {
-                <div class="col"><p class="text-muted">No tasks from last month.</p></div>
-            }
-        </div>
+    <!-- Last Month Section -->
+    <h4 class="mt-4 mb-3">Last Month</h4>
+    <div class="row g-3">
+        @if (!Model.LastMonthsTasks.Any())
+        {
+            <p class="text-muted">No tasks from last month.</p>
+        }
+        @foreach (var task in Model.LastMonthsTasks)
+        {
+            <div class="col-md-3"><div class="card p-2">@task.Title</div></div>
+        }
     </div>
 </div>

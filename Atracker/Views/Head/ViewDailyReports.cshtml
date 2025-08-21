@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Atracker.Models.DailyReport>
+
+@{
+    ViewData["Title"] = "Submitted Daily Reports";
+    Layout = "~/Views/Shared/_HeadLayout.cshtml";
+}
+
+<div class="custom-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Submitted Daily Reports</h3>
+        <a asp-action="UserManagement" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+    <hr />
+
+    <div class="list-group">
+        @if (!Model.Any())
+        {
+            <p class="text-muted">No daily reports have been submitted by trackers yet.</p>
+        }
+        else
+        {
+            @foreach (var report in Model)
+            {
+                <div class="list-group-item flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Report from: @report.User.FullName</h5>
+                        <small>@report.ReportDate.ToString("g")</small>
+                    </div>
+                    <p class="mb-1">@report.ReportContent</p>
+                </div>
+            }
+        }
+    </div>
+</div>

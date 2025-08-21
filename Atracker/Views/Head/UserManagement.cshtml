@@ -1,79 +1,47 @@
 ﻿@model IEnumerable<Atracker.Models.TaskItem>
 
 @{
-    // Note: UserManagement is now the main task dashboard
-    ViewData["Title"] = "Users & Task Management";
-    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+    ViewData["Title"] = "Task & Delivery Management";
+    Layout = "~/Views/Shared/_HeadLayout.cshtml"; // Use the new layout
 }
 
 <div class="custom-card">
     <h2 class="mb-4">Welcome To Head Dashboard</h2>
     <div class="custom-card">
         <h4 class="mb-3">Task & Delivery Management</h4>
+        
+        <form asp-action="BulkFeedback" method="post">
+            <!-- Top Control Bar -->
+            <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
+                <div>
+                    <a asp-action="AddTask" class="btn btn-sm btn-outline-dark">Add</a>
+                    @* <a href="#" class="btn btn-sm btn-outline-dark">Delete</a> *@
+                    @* <a href="#" class="btn btn-sm btn-outline-dark">update</a> *@
+                    <a asp-action="ViewDailyReports" class="btn btn-sm btn-info">View Daily Reports</a>
 
-        <!-- Top Control Bar -->
-        <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
-            <div>
-                <!-- ADD BUTTON -->
-                <div class="btn-group">
-                    <a asp-action="AddTask" class="btn btn-sm btn-success">Add</a>
-                    <button type="button" class="btn btn-sm btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="visually-hidden">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" asp-action="AddTask">Add Single Task</a></li>
-                        <!-- Add Bulk Import Link Here -->
-                    </ul>
                 </div>
-
-                <!-- DELETE BUTTON -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                    <button type="button" class="btn btn-sm btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="visually-hidden">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Delete Selected</a></li>
-                    </ul>
+                <div class="d-flex">
+                    <input type="search" name="searchString" class="form-control-sm me-2" placeholder="Search...">
+                    <button type="submit" class="btn btn-sm btn-primary">Bulk Feedback</button>
                 </div>
-
-                <!-- UPDATE BUTTON -->
-                <a href="#" class="btn btn-sm btn-info">Update</a>
             </div>
 
-            <!-- SEARCH AND BULK FEEDBACK -->
-            <div>
-                <input type="search" class="form-control-sm" placeholder="Search...">
-                <button class="btn btn-sm btn-secondary">Bulk Feedback</button>
-            </div>
-        </div>
-
-        <!-- Task List Loop -->
-        @if (!Model.Any())
-        {
-            <p>No tasks found. Click "Add" to create one.</p>
-        }
-        else
-        {
-            foreach (var task in Model)
+            <!-- Task List -->
+            @foreach (var task in Model)
             {
                 <div class="list-item">
                     <div>
-                        <input type="checkbox" class="form-check-input me-2">
-                        <span>@task.Title | Status: @task.TaskStatus | @task.Deadline.ToShortDateString()</span>
+                        <input type="checkbox" name="selectedTaskIds" value="@task.Id" class="form-check-input me-2">
+                        <span class="dot me-2"></span>
+                        <span>@task.Title | Round | @task.TaskStatus</span>
                     </div>
                     <div>
-                        <!-- Update Button -->
                         <a asp-action="EditTask" asp-route-id="@task.Id" class="btn btn-update btn-sm">update</a>
-
-                        <!-- Feedback Button (Links to the Feedback action) -->
                         <a asp-action="Feedback" asp-route-id="@task.Id" class="btn btn-purple btn-sm">Feedback</a>
-
-                        <!-- Delete Button (Links to the DeleteTask confirmation action) -->
                         <a asp-action="DeleteTask" asp-route-id="@task.Id" class="btn btn-danger btn-sm">🗑️</a>
                     </div>
                 </div>
             }
-        }
+        </form>
     </div>
 </div>

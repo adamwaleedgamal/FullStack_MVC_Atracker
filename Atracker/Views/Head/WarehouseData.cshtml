@@ -2,23 +2,46 @@
 
 @{
     ViewData["Title"] = "Warehouse Data";
-    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+    Layout = "~/Views/Shared/_HeadLayout.cshtml";
 }
 
 <div class="custom-card">
-    <h4 class="mb-3">Samples name</h4>
-    <!-- Placeholder UI based on mockup -->
-    <div class="d-flex justify-content-between my-2 p-2 bg-light border rounded">
-        <span>Sample A</span>
-        <span>Sample B</span>
-        <span>Sample C</span>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>All Warehouse Data</h3>
+        <a asp-action="AddSample" class="btn btn-success">Add New Sample</a>
     </div>
+    <hr />
 
-    <h4 class="mt-4 mb-3">Samples ID</h4>
-    <div class="list-group">
+    <!-- Samples Name Section -->
+    <h4 class="mb-3">Samples name</h4>
+    <div class="row g-3 mb-4">
         @foreach (var item in Model)
         {
-            <div class="list-group-item">@item.SampleIdentifier - @item.SampleName</div>
+            <div class="col-md-3">
+                <div class="p-2 rounded text-center" style="background-color: #e9ecef;">@item.SampleName</div>
+            </div>
+        }
+    </div>
+
+    <!-- Samples ID / Details Section -->
+    <h4 class="mt-4 mb-3">Samples ID</h4>
+    <div class="list-group">
+        @if (!Model.Any())
+        {
+            <p class="text-muted">No warehouse samples found. Click "Add New Sample" to create one.</p>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>@item.SampleIdentifier - @item.SampleName</span>
+                    <div>
+                        <a asp-action="EditSample" asp-route-id="@item.Id" class="btn btn-sm btn-info">Edit</a>
+                        <a asp-action="DeleteSample" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                </div>
+            }
         }
     </div>
 </div>

@@ -1,9 +1,30 @@
-﻿@{
-    ViewData["Title"] = "Communication";
-    Layout = "~/Views/Shared/_HeadTrackerLayout.cshtml";
+﻿@model Atracker.Models.IssueReport
+
+@{
+    ViewData["Title"] = "Communication & Issues";
+    Layout = "~/Views/Shared/_HeadLayout.cshtml";
 }
 
 <div class="custom-card">
-    <h1>Communication & Issues</h1>
-    <p>This page is under construction. The UI for managing issues and communications will be built here.</p>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3>Reply / Report Issue</h3>
+        <a asp-action="ViewReports" class="btn btn-secondary">View All Reports</a>
+    </div>
+    <hr />
+
+    <form asp-action="Communication" method="post">
+
+        <!-- This div will display any general model errors -->
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Content" class="form-label">Reply / Issue Details</label>
+            <textarea asp-for="Content" class="form-control" rows="8"></textarea>
+
+            <!-- This span will display the "Please enter details..." error message if the form is empty -->
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-dark btn-lg">Submit</button>
+    </form>
 </div>

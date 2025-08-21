@@ -2,40 +2,57 @@
 
 using Atracker.Data;
 using Atracker.Models;
+using Atracker.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Atracker.Controllers
 {
-    [Authorize(Roles = "Head")]
+    [Authorize(Roles = "Head, Admin")]
     public class HeadController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser>
+    _userManager;
 
-        public HeadController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public HeadController(ApplicationDbContext context, UserManager<ApplicationUser>
+            userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // --- MAIN DASHBOARD (USER MANAGEMENT) ---
-        // This action now serves as the main dashboard, displaying the task list.
-        // GET: /Head/UserManagement
-        public async Task<IActionResult> UserManagement()
+        // --- USERS MANAGEMENT (MAIN DASHBOARD) & TASK CRUD ---
+        public async Task<IActionResult>
+            UserManagement(string searchString)
         {
-            var tasks = await _context.TaskItems.ToListAsync();
-            return View(tasks);
+            ViewData["CurrentFilter"] = searchString;
+            var tasksQuery = _context.TaskItems.AsQueryable();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                tasksQuery = tasksQuery.Where(t => t.Title.Contains(searchString));
+            }
+            return View(await tasksQuery.OrderByDescending(t => t.Id).ToListAsync());
         }
 
-        // --- TASK CRUD ---
-        public IActionResult AddTask() => View();
+        public async Task<IActionResult>
+            AddTask()
+        {
+            await PopulateAssignableUsersDropDownList();
+            return View();
+        }
+
         [HttpPost]
-        public async Task<IActionResult> AddTask(TaskItem task)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult>
+            AddTask([Bind("Title,Description,Deadline,Location,DeliveryPriority,AssignedToId")] TaskItem task)
         {
             if (ModelState.IsValid)
             {
@@ -43,20 +60,24 @@ namespace Atracker.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(UserManagement));
             }
+            await PopulateAssignableUsersDropDownList();
             return View(task);
         }
 
-        public async Task<IActionResult> EditTask(int? id)
+        public async Task<IActionResult>
+            EditTask(int? id)
         {
             if (id == null) return NotFound();
             var task = await _context.TaskItems.FindAsync(id);
             if (task == null) return NotFound();
+            await PopulateAssignableUsersDropDownList();
             return View(task);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditTask(int id, [Bind("Id,Title,Description,Deadline,Location,DeliveryPriority,TaskStatus,ReplyMessage")] TaskItem task)
+        public async Task<IActionResult>
+            EditTask(int id, [Bind("Id,Title,Description,Deadline,Location,DeliveryPriority,TaskStatus,ReplyMessage,AssignedToId")] TaskItem task)
         {
             if (id != task.Id) return NotFound();
             if (ModelState.IsValid)
@@ -65,10 +86,12 @@ namespace Atracker.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(UserManagement));
             }
+            await PopulateAssignableUsersDropDownList();
             return View(task);
         }
 
-        public async Task<IActionResult> DeleteTask(int? id)
+        public async Task<IActionResult>
+            DeleteTask(int? id)
         {
             if (id == null) return NotFound();
             var task = await _context.TaskItems.FirstOrDefaultAsync(m => m.Id == id);
@@ -78,20 +101,17 @@ namespace Atracker.Controllers
 
         [HttpPost, ActionName("DeleteTaskConfirmed")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteTaskConfirmed(int id)
+        public async Task<IActionResult>
+            DeleteTaskConfirmed(int id)
         {
             var task = await _context.TaskItems.FindAsync(id);
-            if (task != null)
-            {
-                _context.TaskItems.Remove(task);
-            }
+            if (task != null) _context.TaskItems.Remove(task);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(UserManagement));
         }
 
-        // --- FEEDBACK FUNCTION ---
-        // GET: /Head/Feedback/5
-        public async Task<IActionResult> Feedback(int? id) // Action name matches the button link
+        public async Task<IActionResult>
+            Feedback(int? id)
         {
             if (id == null) return NotFound();
             var task = await _context.TaskItems.FindAsync(id);
@@ -99,52 +119,176 @@ namespace Atracker.Controllers
             return View(task);
         }
 
-        // POST: /Head/Feedback/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Feedback(int id, string replyMessage)
+        public async Task<IActionResult>
+            Feedback(int id, string replyMessage)
         {
             var taskToUpdate = await _context.TaskItems.FindAsync(id);
             if (taskToUpdate == null) return NotFound();
-
             taskToUpdate.ReplyMessage = replyMessage;
             _context.Update(taskToUpdate);
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(UserManagement));
         }
 
-
-        // --- WAREHOUSE SAMPLES CRUD ---
-        public async Task<IActionResult> WarehouseData()
+        // --- BULK FEEDBACK ---
+        [HttpPost]
+        public async Task<IActionResult>
+            BulkFeedback(int[] selectedTaskIds, string feedbackMessage)
         {
-            if (!_context.WarehouseSamples.Any())
+            if (selectedTaskIds == null || selectedTaskIds.Length == 0) return RedirectToAction(nameof(UserManagement));
+
+            if (string.IsNullOrEmpty(feedbackMessage))
             {
-                _context.WarehouseSamples.Add(new WarehouseSample { SampleName = "Chemical A", SampleIdentifier = "CHEM-001" });
-                _context.WarehouseSamples.Add(new WarehouseSample { SampleName = "Component B", SampleIdentifier = "COMP-B-42" });
+                var viewModel = new BulkFeedbackViewModel { SelectedTaskIds = selectedTaskIds.ToList() };
+                return View(viewModel);
+            }
+
+            var tasksToUpdate = await _context.TaskItems.Where(t => selectedTaskIds.Contains(t.Id)).ToListAsync();
+            foreach (var task in tasksToUpdate)
+            {
+                task.ReplyMessage = feedbackMessage;
+            }
+            _context.UpdateRange(tasksToUpdate);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(UserManagement));
+        }
+
+        // --- SCHEDULING ---
+        public async Task<IActionResult>
+            Scheduling()
+        {
+            await PopulateAssignableUsersDropDownList();
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult>
+            Scheduling([Bind("Title,Description,Deadline,Location,DeliveryPriority,AssignedToId")] TaskItem task)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(task);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(UserManagement));
+            }
+            await PopulateAssignableUsersDropDownList();
+            return View(task);
+        }
+
+        // --- PERFORMANCE & REPORTS ---
+        public async Task<IActionResult>
+            Performance()
+        {
+            if (!_context.TaskItems.Any())
+            {
+                _context.TaskItems.Add(new TaskItem { Title = "Today's Task", Deadline = DateTime.Today });
+                _context.TaskItems.Add(new TaskItem { Title = "Last Week's Task", Deadline = DateTime.Today.AddDays(-3) });
+                _context.TaskItems.Add(new TaskItem { Title = "Last Month's Task", Deadline = DateTime.Today.AddDays(-14) });
                 await _context.SaveChangesAsync();
             }
-            return View(await _context.WarehouseSamples.ToListAsync());
+
+            var today = DateTime.Today;
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+            var startOfMonth = new DateTime(today.Year, today.Month, 1);
+
+            var viewModel = new ManagerReportViewModel
+            {
+                TodaysTasks = await _context.TaskItems.Where(t => t.Deadline.Date == today).ToListAsync(),
+                LastWeeksTasks = await _context.TaskItems.Where(t => t.Deadline.Date >= startOfWeek && t.Deadline.Date < today).ToListAsync(),
+                LastMonthsTasks = await _context.TaskItems.Where(t => t.Deadline.Date >= startOfMonth && t.Deadline.Date < startOfWeek).ToListAsync()
+            };
+            return View(viewModel);
         }
+
+        // --- COMMUNICATION & ISSUE REPORTING ---
+        public IActionResult Communication() => View(new IssueReport());
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult>
+            Communication([Bind("Content")] IssueReport report)
+        {
+            if (ModelState.IsValid)
+            {
+                report.ReportedById = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                report.ReportDate = DateTime.UtcNow;
+                _context.Add(report);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Your report has been submitted successfully!";
+                return RedirectToAction(nameof(ViewReports));
+            }
+            return View(report);
+        }
+
+        public async Task<IActionResult>
+            ViewReports()
+        {
+            var reports = await _context.IssueReports
+            .Include(r => r.ReportedBy)
+            .OrderByDescending(r => r.ReportDate)
+            .ToListAsync();
+            return View(reports);
+        }
+
+        // --- WAREHOUSE DATA (FULL CRUD) ---
+        public async Task<IActionResult>
+            WarehouseData() => View(await _context.WarehouseSamples.ToListAsync());
+
         public IActionResult AddSample() => View();
         [HttpPost]
-        public async Task<IActionResult> AddSample(WarehouseSample sample)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult>
+            AddSample([Bind("SampleName,SampleIdentifier")] WarehouseSample sample)
         {
-            _context.Add(sample);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(WarehouseData));
+            if (ModelState.IsValid)
+            {
+                _context.Add(sample);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(WarehouseData));
+            }
+            return View(sample);
         }
-        public async Task<IActionResult> EditSample(int? id) => View(await _context.WarehouseSamples.FindAsync(id));
+
+        public async Task<IActionResult>
+            EditSample(int? id)
+        {
+            if (id == null) return NotFound();
+            var sample = await _context.WarehouseSamples.FindAsync(id);
+            if (sample == null) return NotFound();
+            return View(sample);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> EditSample(int id, WarehouseSample sample)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult>
+            EditSample(int id, [Bind("Id,SampleName,SampleIdentifier")] WarehouseSample sample)
         {
-            _context.Update(sample);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(WarehouseData));
+            if (id != sample.Id) return NotFound();
+            if (ModelState.IsValid)
+            {
+                _context.Update(sample);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(WarehouseData));
+            }
+            return View(sample);
         }
-        public async Task<IActionResult> DeleteSample(int? id) => View(await _context.WarehouseSamples.FindAsync(id));
+
+        public async Task<IActionResult>
+            DeleteSample(int? id)
+        {
+            if (id == null) return NotFound();
+            var sample = await _context.WarehouseSamples.FindAsync(id);
+            if (sample == null) return NotFound();
+            return View(sample);
+        }
+
         [HttpPost, ActionName("DeleteSampleConfirmed")]
-        public async Task<IActionResult> DeleteSampleConfirmed(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult>
+            DeleteSampleConfirmed(int id)
         {
             var sample = await _context.WarehouseSamples.FindAsync(id);
             if (sample != null) _context.WarehouseSamples.Remove(sample);
@@ -152,11 +296,24 @@ namespace Atracker.Controllers
             return RedirectToAction(nameof(WarehouseData));
         }
 
+        // --- HELPER METHOD ---
+        private async Task PopulateAssignableUsersDropDownList()
+        {
+            var managers = await _userManager.GetUsersInRoleAsync("Manager");
+            var trackers = await _userManager.GetUsersInRoleAsync("Tracker");
+            var assignableUsers = managers.Concat(trackers).OrderBy(u => u.FullName).ToList();
+            ViewBag.AssignableUsers = new SelectList(assignableUsers, "Id", "FullName");
+        }
+        // GET: /Head/ViewDailyReports
+        public async Task<IActionResult> ViewDailyReports()
+        {
+            // Query the database for all DailyReport entries
+            var reports = await _context.DailyReports
+                .Include(r => r.User) // IMPORTANT: This includes the user's details to show their name
+                .OrderByDescending(r => r.ReportDate) // Show the newest reports first
+                .ToListAsync();
 
-        // --- OTHER SIDEBAR PAGES ---
-        public async Task<IActionResult> ViewAllUsers() => View(await _userManager.Users.ToListAsync());
-        public IActionResult Scheduling() => View();
-        public IActionResult Performance() => View();
-        public IActionResult Communication() => View();
+            return View(reports);
+        }
     }
 }

@@ -17,6 +17,9 @@ namespace Atracker.Data
         public DbSet<TaskItem> TaskItems { get; set; }
         public DbSet<SampleData> SampleDatas { get; set; }
         public DbSet<WarehouseSample> WarehouseSamples { get; set; }
+        public DbSet<IssueReport> IssueReports { get; set; }
+        public DbSet<DailyReport> DailyReports { get; set; }
+
 
 
 

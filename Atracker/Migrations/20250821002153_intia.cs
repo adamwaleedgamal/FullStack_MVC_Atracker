@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Atracker.Migrations
 {
     /// <inheritdoc />
-    public partial class ininini : Migration
+    public partial class intia : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,11 @@ namespace Atracker.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ManagerFeedback = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PermanentAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PresentAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReferralSource = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -181,6 +186,48 @@ namespace Atracker.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DailyReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReportContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DailyReports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DailyReports_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IssueReports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReportDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReportedById = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IssueReports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IssueReports_AspNetUsers_ReportedById",
+                        column: x => x.ReportedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -368,6 +415,16 @@ namespace Atracker.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DailyReports_UserId",
+                table: "DailyReports",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IssueReports_ReportedById",
+                table: "IssueReports",
+                column: "ReportedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MaintenanceLogs_VehicleId",
                 table: "MaintenanceLogs",
                 column: "VehicleId");
@@ -425,6 +482,12 @@ namespace Atracker.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "DailyReports");
+
+            migrationBuilder.DropTable(
+                name: "IssueReports");
 
             migrationBuilder.DropTable(
                 name: "MaintenanceLogs");

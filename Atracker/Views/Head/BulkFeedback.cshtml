@@ -1,0 +1,29 @@
+﻿@model Atracker.ViewModels.ManagerBulkFeedbackViewModel
+
+@{
+    ViewData["Title"] = "Provide Bulk Feedback";
+    Layout = "~/Views/Shared/_MangerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h3>Provide Bulk Feedback</h3>
+    <p>You are providing feedback for @Model.SelectedUserIds.Count() user(s).</p>
+    <hr />
+    <form asp-action="BulkFeedback" method="post">
+
+        <!-- THIS IS THE CRITICAL CHANGE -->
+        <!-- The loop now correctly uses @Model.SelectedUserIds -->
+        @foreach (var userId in Model.SelectedUserIds)
+        {
+            <input type="hidden" name="selectedUserIds" value="@userId" />
+        }
+
+        <div class="form-group mb-3">
+            <label asp-for="FeedbackMessage">Feedback for all selected users:</label>
+            <textarea asp-for="FeedbackMessage" class="form-control" rows="5"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Feedback for All</button>
+        <a asp-action="UserTaskManagement" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

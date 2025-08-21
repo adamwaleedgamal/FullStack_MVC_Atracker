@@ -11,31 +11,29 @@
         <a asp-action="AddVehicle" class="btn btn-success">Add New Vehicle</a>
     </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Vehicle ID</th>
-                <th>Car Type</th>
-                <th>License Plate</th>
-                <th>Assigned Driver</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var vehicle in Model)
-            {
-                <tr>
-                    <td>@vehicle.VehicleIdentifier</td>
-                    <td>@vehicle.CarType</td>
-                    <td>@vehicle.LicensePlate</td>
-                    <td>@(vehicle.AssignedDriver?.FullName ?? "N/A")</td>
-                    <td>
-                        <a asp-action="VehicleDetails" asp-route-id="@vehicle.Id" class="btn btn-sm btn-secondary">Details</a>
-                        <a asp-action="EditVehicle" asp-route-id="@vehicle.Id" class="btn btn-sm btn-info">Edit</a>
-                        <a asp-action="DeleteVehicle" asp-route-id="@vehicle.Id" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @if (!Model.Any())
+    {
+        <p>No vehicles found. Click "Add New Vehicle" to create one.</p>
+    }
+    else
+    {
+        @foreach (var vehicle in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-body row">
+                    <div class="col-md-3">
+                        <img src="https://i.imgur.com/gK6kPlF.png" class="img-fluid rounded" alt="Vehicle Image">
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Vehicle ID: @vehicle.VehicleIdentifier</h5>
+                        <p><strong>License Plate:</strong> @vehicle.LicensePlate | <strong>Type:</strong> @vehicle.CarType</p>
+                        <p><strong>Driver:</strong> @(vehicle.AssignedDriver?.FullName ?? "N/A")</p>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center justify-content-end">
+                        <a asp-action="VehicleDetails" asp-route-id="@vehicle.Id" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
 </div>

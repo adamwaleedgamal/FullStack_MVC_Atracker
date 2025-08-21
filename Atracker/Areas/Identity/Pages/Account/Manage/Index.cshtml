@@ -3,28 +3,42 @@
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3>@ViewData["Title"]</h3>
-<partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
+<div class="container mt-5">
+    <partial name="_StatusMessage" model="Model.StatusMessage" />
+    <a asp-controller="Tracker" asp-action="TaskOverview" class="btn btn-link mb-3">← Back</a>
+
+    <div class="card p-4">
         <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label"></label>
+            <div class="row">
+                <!-- Left Column: Avatar -->
+                <div class="col-md-3 text-center">
+                    <img src="https://i.imgur.com/gEKsypa.png" class="rounded-circle mb-3" width="150" alt="User Avatar" />
+                    <h4>@Model.Input.FullName</h4>
+                    <p class="text-muted">Full Stack Developer<br>Bay Area, San Francisco, CA</p>
+                    <button type="button" class="btn btn-secondary">Resume</button>
+                </div>
+
+                <!-- Right Column: Details -->
+                <div class="col-md-9">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr><th scope="row" style="width: 200px;">Full Name</th><td><input asp-for="Input.FullName" class="form-control" /></td></tr>
+                            <tr><th scope="row">Email</th><td><input asp-for="Username" class="form-control" disabled /></td></tr>
+                            <tr><th scope="row">Phone</th><td><input asp-for="Input.PhoneNumber" class="form-control" /></td></tr>
+                            <tr><th scope="row">Date of Birth</th><td><input asp-for="Input.DateOfBirth" class="form-control" type="date" /></td></tr>
+                            <tr><th scope="row">Permanent Address</th><td><input asp-for="Input.PermanentAddress" class="form-control" /></td></tr>
+                            <tr><th scope="row">Present Address</th><td><input asp-for="Input.PresentAddress" class="form-control" /></td></tr>
+                            <tr><th scope="row">Referral Source</th><td><input asp-for="Input.ReferralSource" class="form-control" /></td></tr>
+                            <tr><th scope="row">Gender</th><td><input asp-for="Input.Gender" class="form-control" /></td></tr>
+                        </tbody>
+                    </table>
+                    <button id="update-profile-button" type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

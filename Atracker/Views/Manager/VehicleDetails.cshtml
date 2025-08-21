@@ -6,50 +6,39 @@
 }
 
 <div class="custom-card">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>Fleet & Vehicle Monitoring</h3>
-        <a asp-action="FleetVehicleMonitoring" class="btn btn-secondary">Back to List</a>
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-4">Fleet & Vehicle Monitoring</h2>
+        <a asp-action="FleetVehicleMonitoring" class="btn btn-secondary">Back to Fleet List</a>
     </div>
-    <hr />
 
     <div class="row">
         <!-- Left Column: Details -->
-        <div class="col-md-7">
+        <div class="col-md-6">
             <!-- Vehicle Status Card -->
             <div class="card p-3 mb-3">
-                <h5 class="card-title">Vehicle Status & Performance</h5>
+                <h5 class="text-primary">Vehicle Status & Performance</h5>
                 <p><strong>Vehicle ID:</strong> @Model.VehicleIdentifier</p>
                 <p><strong>Car Type:</strong> @Model.CarType</p>
-                <p><strong>License Plate:</strong> @Model.LicensePlate</p>
+                <p><strong>License Plate Number:</strong> @Model.LicensePlate</p>
             </div>
-
-            <!-- Driver Info Card -->
             <div class="card p-3 mb-3">
-                <h5 class="card-title">Driver's Name & Contact Information</h5>
-                @if (Model.AssignedDriver != null)
-                {
-                    <p><strong>Name:</strong> @Model.AssignedDriver.FullName</p>
-                    <p><strong>Phone No.:</strong> @(Model.AssignedDriver.PhoneNumber ?? "N/A")</p>
-                    <p><strong>Email:</strong> @Model.AssignedDriver.Email</p>
-                }
-                else
-                {
-                    <p class="text-muted">No driver assigned.</p>
-                }
+                <h5 class="text-primary">Driver's Name & Contact Information</h5>
+                <p><strong>Name:</strong> @Model.AssignedDriver?.FullName</p>
+                <p><strong>Phone No.:</strong> @(Model.AssignedDriver?.PhoneNumber ?? "N/A")</p>
+                <p><strong>Email:</strong> @Model.AssignedDriver?.Email</p>
             </div>
-
-            <!-- Maintenance Card -->
-            <div class="card p-3 mb-3">
-                <h5 class="card-title">Maintenance & Alerts</h5>
+            <div class="card p-3">
+                <h5 class="text-primary">Maintenance & Alerts</h5>
                 <p><strong>Last Inspection:</strong> @Model.LastInspection.ToShortDateString()</p>
                 <p><strong>Last Oil Change:</strong> @Model.LastOilChange.ToShortDateString()</p>
                 <p><strong>Next Oil Change:</strong> @Model.NextOilChange.ToShortDateString()</p>
             </div>
         </div>
-
         <!-- Right Column: Image -->
-        <div class="col-md-5">
-            <img src="https://i.imgur.com/gK6kPlF.png" class="img-fluid rounded" alt="Delivery Truck" />
+        <div class="col-md-6">
+            <!-- I have updated this with a working image link. -->
+            <!-- To use your own, place an image in wwwroot/images/ and change the src -->
+            <img src="https://i.imgur.com/Oes2hI4.png" class="img-fluid rounded" alt="Delivery Truck" />
         </div>
     </div>
 </div>

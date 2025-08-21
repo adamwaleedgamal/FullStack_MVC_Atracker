@@ -1,4 +1,29 @@
-﻿@page
-@model Atracker.Views.Head.EditSampleModel
+﻿@model Atracker.Models.WarehouseSample
+
 @{
+    ViewData["Title"] = "Edit Warehouse Sample";
+    Layout = "~/Views/Shared/_HeadLayout.cshtml";
 }
+
+<div class="custom-card">
+    <h3>Edit Warehouse Sample</h3>
+    <hr />
+    <form asp-action="EditSample">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group mb-2">
+            <label asp-for="SampleName" class="control-label"></label>
+            <input asp-for="SampleName" class="form-control" />
+            <span asp-validation-for="SampleName" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="SampleIdentifier" class="control-label"></label>
+            <input asp-for="SampleIdentifier" class="form-control" />
+            <span asp-validation-for="SampleIdentifier" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a asp-action="WarehouseData" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

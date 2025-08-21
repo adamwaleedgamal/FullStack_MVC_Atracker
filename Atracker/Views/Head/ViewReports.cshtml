@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Atracker.Models.IssueReport>
+
+@{
+    ViewData["Title"] = "Submitted Reports";
+    Layout = "~/Views/Shared/_HeadLayout.cshtml";
+}
+
+<div class="custom-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Submitted Communication & Issue Reports</h3>
+        <a asp-action="Communication" class="btn btn-primary">Report a New Issue</a>
+    </div>
+    <hr />
+
+    <div class="list-group">
+        @if (!Model.Any())
+        {
+            <p class="text-muted">No reports have been submitted yet.</p>
+        }
+        else
+        {
+            @foreach (var report in Model.OrderByDescending(r => r.ReportDate))
+            {
+                <div class="list-group-item">
+                    <p>@report.Content</p>
+                    <small class="text-muted">
+                        Reported by: @report.ReportedBy.FullName on @report.ReportDate.ToShortDateString()
+                    </small>
+                </div>
+            }
+        }
+    </div>
+</div>
