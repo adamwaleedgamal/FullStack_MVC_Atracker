@@ -12,7 +12,7 @@ namespace Atracker.Controllers
         {
             if (User.IsInRole("Admin"))
             {
-                return RedirectToAction("TaskDeliveryManagement", "Admin"); 
+                return RedirectToAction("UserManagement", "Admin"); 
             }
             if (User.IsInRole("Manager"))
             {

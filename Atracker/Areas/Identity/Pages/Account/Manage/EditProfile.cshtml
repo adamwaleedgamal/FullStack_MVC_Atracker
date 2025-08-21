@@ -1,0 +1,28 @@
+﻿@page
+@model EditProfileModel
+@{
+    ViewData["Title"] = "Edit Profile";
+    // THIS IS THE CRITICAL CHANGE TO FIX THE UI
+    Layout = "~/Views/Shared/_TrackerLayout.cshtml";
+}
+
+<div class="custom-card">
+    <h3>Edit Profile</h3>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-group mb-3"><label asp-for="Input.FullName"></label><input asp-for="Input.FullName" class="form-control" /></div>
+                <div class="form-group mb-3"><label asp-for="Input.PhoneNumber"></label><input asp-for="Input.PhoneNumber" class="form-control" /></div>
+                <div class="form-group mb-3"><label asp-for="Input.DateOfBirth"></label><input asp-for="Input.DateOfBirth" class="form-control" type="date"/></div>
+                <div class="form-group mb-3"><label asp-for="Input.PermanentAddress"></label><input asp-for="Input.PermanentAddress" class="form-control" /></div>
+                <div class="form-group mb-3"><label asp-for="Input.PresentAddress"></label><input asp-for="Input.PresentAddress" class="form-control" /></div>
+                <div class="form-group mb-3"><label asp-for="Input.ReferralSource"></label><input asp-for="Input.ReferralSource" class="form-control" /></div>
+                <div class="form-group mb-3"><label asp-for="Input.Gender"></label><input asp-for="Input.Gender" class="form-control" /></div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

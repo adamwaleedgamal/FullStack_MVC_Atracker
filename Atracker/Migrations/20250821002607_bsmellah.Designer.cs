@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Atracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250821002153_intia")]
-    partial class intia
+    [Migration("20250821002607_bsmellah")]
+    partial class bsmellah
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,4 +1,6 @@
-/* General Body and Layout Styles */
+/* Atracker Final Project Stylesheet */
+
+/* 1. General Body and Layout Styles */
 :root {
     --sidebar-bg: #f8f9fa;
     --main-bg: #e9ecef;
@@ -8,37 +10,57 @@
     --border-color: #dee2e6;
 }
 
+html {
+    font-size: 16px;
+    position: relative;
+    min-height: 100%;
+}
+
 body {
+    margin: 0;
     background-color: var(--main-bg);
-    color: var(--dark-text);
 }
 
 .main-container {
     display: flex;
-    min-height: 100vh;
+    min-height: calc(100vh - 56px); /* Full height minus header */
 }
 
 .main-content {
     flex-grow: 1;
     padding: 2rem;
-    background-color: var(--main-bg);
 }
 
-.top-header {
-    background-color: #343a40;
+.custom-card {
+    background-color: var(--card-bg);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 2. Header Styles */
+.top-header { /* For Atracker Layout */
+    background-color: #000;
     color: white;
     padding: 1rem 1.5rem;
     font-size: 1.25rem;
 }
 
+.top-header-dark { /* For Head/Manger Layouts */
+    background-color: #000;
+    color: white;
+    padding: 0.75rem 1.5rem;
+}
 
-/* Sidebar Styles */
+/* 3. Sidebar Styles */
 .sidebar {
     width: 280px;
     min-width: 280px;
     background-color: var(--sidebar-bg);
     border-right: 1px solid var(--border-color);
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar-header {
@@ -47,11 +69,17 @@ body {
 }
 
 .sidebar .nav-link {
-    color: var(--dark-text);
-    background-color: #e9ecef;
     border-radius: 0.25rem;
     margin-bottom: 0.5rem;
     font-weight: 500;
+    text-align: center;
+    padding: 0.75rem;
+}
+
+/* Default Sidebar Link Style */
+.sidebar .nav-link {
+    color: var(--dark-text);
+    background-color: #e9ecef;
 }
 
     .sidebar .nav-link:hover, .sidebar .nav-link.active {
@@ -59,13 +87,40 @@ body {
         color: white;
     }
 
-/* Login Page Styles */
+/* Specific Sidebar Styles for Head & Manger */
+.head-layout .sidebar .nav-link,
+.manger-layout .sidebar .nav-link {
+    background-color: #343a40;
+    color: white;
+}
+
+    .head-layout .sidebar .nav-link:hover,
+    .manger-layout .sidebar .nav-link:hover {
+        background-color: #495057;
+    }
+
+/* THIS IS THE NEW, CORRECTED CSS FOR THE ATRACKER LAYOUT */
+body:not(.head-layout):not(.manger-layout) .sidebar .nav-link {
+    background-color: #343a40;
+    color: white;
+}
+
+    body:not(.head-layout):not(.manger-layout) .sidebar .nav-link:hover,
+    body:not(.head-layout):not(.manger-layout) .sidebar .nav-link.active {
+        background-color: #6c757d; /* A lighter gray for active state */
+    }
+
+body:not(.head-layout):not(.manger-layout) .main-content {
+    background-color: #fff; /* White background for Atracker content */
+}
+
+
+/* 4. Login Page Styles */
 .login-body {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: var(--main-bg);
 }
 
 .login-card {
@@ -77,54 +132,26 @@ body {
     max-width: 450px;
     text-align: center;
 }
-
-    .login-card h2 {
-        margin-bottom: 2rem;
-        font-weight: 300;
-    }
-
-    .login-card .btn-primary {
-        background-color: var(--primary-purple);
-        border-color: var(--primary-purple);
-        width: 100%;
-        padding: 0.75rem;
-        font-size: 1rem;
-    }
-
-    .login-card .form-control {
-        background-color: #f1f1f1;
-        border: none;
-        padding: 0.75rem 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .login-card .register-link {
-        margin-top: 1.5rem;
-        font-size: 0.9rem;
-    }
+/* ... other login styles are correct ... */
 
 
-/* General Component Styles */
-.custom-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    padding: 2rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+/* 5. Profile Page Specific Styles */
+body.profile-page {
+    background-color: #f4f7f6;
 }
 
-.btn-purple {
-    background-color: var(--primary-purple);
-    border-color: var(--primary-purple);
-    color: white;
+.profile-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
-.btn-update {
-    background-color: #e9ecef;
-    color: var(--dark-text);
-    border: 1px solid #ced4da;
+.profile-details-table th {
+    width: 30%;
+    color: #6c757d;
 }
 
+/* 6. General Component Styles */
 .list-item {
     display: flex;
     justify-content: space-between;
@@ -132,45 +159,11 @@ body {
     padding: 1rem;
     border: 1px solid var(--border-color);
     background-color: white;
-    margin-bottom: -1px; /* Creates a shared border effect */
+    margin-bottom: -1px;
 }
 
-
-/* Styles for the new Head Layout */
-.top-header-dark {
-    background-color: #000;
-    color: white;
-    padding: 1rem 1.5rem;
-    font-size: 1.25rem;
-}
-
-.head-layout .sidebar .nav-link {
-    background-color: #343a40;
+.btn-purple {
+    background-color: var(--primary-purple);
+    border-color: var(--primary-purple);
     color: white;
 }
-
-    .head-layout .sidebar .nav-link:hover, .head-layout .sidebar .nav-link.active {
-        background-color: #495057;
-    }
-/* Styles for the new Manger Layout */
-.top-header-dark {
-    background-color: #000;
-    color: white;
-    padding: 0.75rem 1.5rem;
-}
-
-.manger-layout .sidebar .nav-link {
-    background-color: #343a40;
-    color: white;
-    font-weight: bold;
-}
-
-    .manger-layout .sidebar .nav-link:hover, .manger-layout .sidebar .nav-link.active {
-        background-color: #495057;
-    }
-
-    .manger-layout .sidebar .nav-link.disabled {
-        background-color: #6c757d;
-        color: #ccc;
-    }
-

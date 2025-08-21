@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Atracker.Migrations
 {
     /// <inheritdoc />
-    public partial class intia : Migration
+    public partial class bsmellah : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

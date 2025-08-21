@@ -3,42 +3,35 @@
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_TrackerLayout.cshtml";
 }
+<partial name="_StatusMessage" model="Model.StatusMessage" />
 
-<div class="container mt-5">
-    <partial name="_StatusMessage" model="Model.StatusMessage" />
-    <a asp-controller="Tracker" asp-action="TaskOverview" class="btn btn-link mb-3">← Back</a>
+<div class="custom-card">
+    <div class="row">
+        <!-- Left Column: Avatar -->
+        <div class="col-md-3 text-center border-end">
+            <img src="~/image/delivery-truck.jpg" class="rounded-circle mb-3" width="150" alt="User Avatar" />
+            <h4>@Model.Input.FullName</h4>
+            <p class="text-muted">Delivery Representative<br>Bay Area, San Francisco, CA</p>
+            <button type="button" class="btn btn-outline-primary">Resume</button>
+        </div>
 
-    <div class="card p-4">
-        <form id="profile-form" method="post">
-            <div class="row">
-                <!-- Left Column: Avatar -->
-                <div class="col-md-3 text-center">
-                    <img src="https://i.imgur.com/gEKsypa.png" class="rounded-circle mb-3" width="150" alt="User Avatar" />
-                    <h4>@Model.Input.FullName</h4>
-                    <p class="text-muted">Full Stack Developer<br>Bay Area, San Francisco, CA</p>
-                    <button type="button" class="btn btn-secondary">Resume</button>
-                </div>
-
-                <!-- Right Column: Details -->
-                <div class="col-md-9">
-                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                    <table class="table table-borderless">
-                        <tbody>
-                            <tr><th scope="row" style="width: 200px;">Full Name</th><td><input asp-for="Input.FullName" class="form-control" /></td></tr>
-                            <tr><th scope="row">Email</th><td><input asp-for="Username" class="form-control" disabled /></td></tr>
-                            <tr><th scope="row">Phone</th><td><input asp-for="Input.PhoneNumber" class="form-control" /></td></tr>
-                            <tr><th scope="row">Date of Birth</th><td><input asp-for="Input.DateOfBirth" class="form-control" type="date" /></td></tr>
-                            <tr><th scope="row">Permanent Address</th><td><input asp-for="Input.PermanentAddress" class="form-control" /></td></tr>
-                            <tr><th scope="row">Present Address</th><td><input asp-for="Input.PresentAddress" class="form-control" /></td></tr>
-                            <tr><th scope="row">Referral Source</th><td><input asp-for="Input.ReferralSource" class="form-control" /></td></tr>
-                            <tr><th scope="row">Gender</th><td><input asp-for="Input.Gender" class="form-control" /></td></tr>
-                        </tbody>
-                    </table>
-                    <button id="update-profile-button" type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </div>
-        </form>
+        <!-- Right Column: Details -->
+        <div class="col-md-9">
+            <table class="table table-borderless profile-details-table">
+                <tbody>
+                    <tr><th>Full Name</th><td>@Model.Input.FullName</td></tr>
+                    <tr><th>Email</th><td>@Model.Username</td></tr>
+                    <tr><th>Phone</th><td>@Model.Input.PhoneNumber</td></tr>
+                    <tr><th>Date of Birth</th><td>@Model.Input.DateOfBirth?.ToShortDateString()</td></tr>
+                    <tr><th>Permanent Address</th><td>@Model.Input.PermanentAddress</td></tr>
+                    <tr><th>Present Address</th><td>@Model.Input.PresentAddress</td></tr>
+                    <tr><th>Referral Source</th><td>@Model.Input.ReferralSource</td></tr>
+                    <tr><th>Gender</th><td>@Model.Input.Gender</td></tr>
+                </tbody>
+            </table>
+            <a asp-page="./EditProfile" class="btn btn-primary">Edit Information</a>
+        </div>
     </div>
 </div>

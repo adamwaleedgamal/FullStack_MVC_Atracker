@@ -28,22 +28,24 @@ namespace Atracker.Controllers
         public async Task<IActionResult> TaskOverview()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentUser = await _userManager.FindByIdAsync(userId);
-            var currentTask = await _context.TaskItems.FirstOrDefaultAsync(t => t.AssignedToId == userId && t.TaskStatus != Status.Completed);
-            var assignedCar = await _context.Vehicles.FirstOrDefaultAsync(v => v.AssignedDriverId == userId);
-
             var viewModel = new TaskOverviewViewModel
             {
-                CurrentUser = currentUser,
-                CurrentTask = currentTask,
-                AssignedCar = assignedCar
+                CurrentUser = await _userManager.FindByIdAsync(userId),
+                CurrentTask = await _context.TaskItems.FirstOrDefaultAsync(t => t.AssignedToId == userId && t.TaskStatus != Status.Completed),
+                AssignedCar = await _context.Vehicles.FirstOrDefaultAsync(v => v.AssignedDriverId == userId)
             };
             return View(viewModel);
         }
 
-        // --- VEHICLE & PERFORMANCE MONITORING ---
-        public IActionResult VehiclePerformanceMonitoring() => View(new DailyReport());
+        // --- VEHICLE & PERFORMANCE MONITORING (CORRECTED) ---
 
+        // GET: Shows the form
+        public IActionResult VehiclePerformanceMonitoring()
+        {
+            return View(new DailyReport());
+        }
+
+        // POST: Saves the form data
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VehiclePerformanceMonitoring([Bind("ReportContent")] DailyReport report)
@@ -52,8 +54,13 @@ namespace Atracker.Controllers
             {
                 report.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 report.ReportDate = DateTime.UtcNow;
-                _context.Add(report);
+
+                // THIS IS THE CRITICAL FIX. We must add to the correct DbSet.
+                _context.DailyReports.Add(report);
+
                 await _context.SaveChangesAsync();
+
+                // This message will be displayed on the Task Overview page.
                 TempData["SuccessMessage"] = "Your daily report has been submitted successfully!";
                 return RedirectToAction(nameof(TaskOverview));
             }
@@ -63,7 +70,9 @@ namespace Atracker.Controllers
         public async Task<IActionResult> UpdateCarData()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var assignedVehicle = await _context.Vehicles.FirstOrDefaultAsync(v => v.AssignedDriverId == userId);
+            var assignedVehicle = await _context.Vehicles
+                .Include(v => v.AssignedDriver)
+                .FirstOrDefaultAsync(v => v.AssignedDriverId == userId);
             return View(assignedVehicle);
         }
     }
